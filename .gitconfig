@@ -1,0 +1,11 @@
+[core]
+  editor = nvim
+
+[pull]
+  rebase = true
+
+[alias]
+  pf = push --force-with-lease
+
+[include]
+  path = ~/.gitconfig.local

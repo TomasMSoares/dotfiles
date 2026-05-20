@@ -1,3 +1,4 @@
 .DS_Store
 *.swp
-*.zshrc.local
+.zshrc.local
+.gitignore.local
