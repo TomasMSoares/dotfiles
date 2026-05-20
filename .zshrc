@@ -21,10 +21,8 @@ setopt HIST_REDUCE_BLANKS
 
 local -a plugins=()
 
-alias ff='firefox'
 alias q='exit'
 alias grep='grep --color=auto'
-alias tum='cd ~/TUM/Master/1FS/'
 alias vim='nvim'
 alias nvi='nvim'
 alias vi='nvim'
@@ -65,4 +63,9 @@ done
 
 setopt PROMPT_SUBST
 PROMPT='[%F{208}%n%f@%F{208}%m%f] %F{167}%1~%f ${vcs_info_msg_0_}%f❯ '
+
+# Load local zsh config
+if [[ -f "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
+fi
 
