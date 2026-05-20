@@ -4,6 +4,9 @@
 [pull]
   rebase = true
 
+[init]
+  defaultBranch = main
+
 [alias]
   pf = push --force-with-lease
 
