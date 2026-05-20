@@ -20,6 +20,7 @@ return {
         sql = { "sqlfluff" },
         json = { "prettier" },
         yaml = { "prettier" },
+        markdown = { "prettier" },
         toml = { "taplo" },
         sh = { "shfmt" },
       },

@@ -1,9 +1,9 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile"},
-    main = "nvim-treesitter",
 
     opts = {
       ensure_installed = {
@@ -18,6 +18,8 @@ return {
         "sql",
         "bash",
         "dockerfile",
+        "markdown",
+        "markdown_inline",
         "json",
         "jsonc",
         "yaml",

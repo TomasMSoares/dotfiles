@@ -9,6 +9,7 @@ return {
       typescript = { "eslint_d" },
       javascriptreact = { "eslint_d" },
       typescriptreact = { "eslint_d" },
+      markdown = { "markdownlint" },
       sql = { "sqlfluff" },
       sh = { "shellcheck" },
       dockerfile = { "hadolint" },

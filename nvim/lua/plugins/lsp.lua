@@ -6,6 +6,7 @@ return {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     "hrsh7th/cmp-nvim-lsp",
+    "mfussenegger/nvim-jdtls",
   },
   config = function()
     require("mason").setup()
@@ -15,11 +16,15 @@ return {
         "ruff",
         "basedpyright",
         "ts_ls",
+        "cssls",
+        "html",
         "clangd",
+        "jdtls",
         "sqls",
         "bashls",
         "dockerls",
         "docker_compose_language_service",
+        "marksman",
         "jsonls",
         "yamlls",
         "taplo",
@@ -84,6 +89,7 @@ return {
 
     lsp.config("dockerls", { capabilities = capabilities })
     lsp.config("docker_compose_language_service", { capabilities = capabilities })
+    lsp.config("marksman", { capabilities = capabilities })
     lsp.config("bashls", { capabilities = capabilities })
     lsp.config("jsonls", { capabilities = capabilities })
     lsp.config("yamlls", { capabilities = capabilities })
