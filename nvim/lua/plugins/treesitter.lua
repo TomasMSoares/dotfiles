@@ -24,6 +24,8 @@ return {
         "jsonc",
         "yaml",
         "toml",
+        "markdown",
+        "markdown_inline",
         "vim",
         "vimdoc"
       },

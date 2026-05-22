@@ -10,8 +10,15 @@ cursor-style = block
 cursor-style-blink = true
 
 # --- UNCOMMENT DESIRED BACKGROUND / SHADER ---
-# custom-shader = shaders/bettercrt.glsl
-# custom-shader-animation = always
-background = #292320
+# custom-shader = shaders/drunkard.glsl
+# custom-shader = shaders/dither.glsl
+# custom-shader = shaders/matrix-hallway.glsl
+custom-shader = shaders/bettercrt.glsl
+# custom-shader = shaders/mnoise.glsl
+# custom-shader = shaders/smoke-and-ghost.glsl
+
+custom-shader-animation = always
+
+# background = #292320
 
 macos-titlebar-style = hidden
