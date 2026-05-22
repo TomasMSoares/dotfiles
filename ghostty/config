@@ -9,7 +9,9 @@ window-padding-y = 10
 cursor-style = block
 cursor-style-blink = true
 
-custom-shader = shaders/bettercrt.glsl
-custom-shader-animation = always
+# --- UNCOMMENT DESIRED BACKGROUND / SHADER ---
+# custom-shader = shaders/bettercrt.glsl
+# custom-shader-animation = always
+background = #292320
 
 macos-titlebar-style = hidden
