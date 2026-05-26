@@ -11,6 +11,8 @@ return {
         "eslint_d",
         "shellcheck",
         "hadolint",
+        "markdownlint",
+        "sqlfluff"
       },
     })
 
