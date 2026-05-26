@@ -2,10 +2,10 @@ local keymap = vim.keymap
 
 keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = "Toggle nvim-tree" }) -- nvim-tree toggle
 
-keymap.set('n', '<C-h>', '<C-w>h', { desc = "Switch to left window" })
-keymap.set('n', '<C-l>', '<C-w>l', { desc = "Switch to right window" })
-keymap.set('n', '<C-k>', '<C-w>k', { desc = "Switch to top window" })
-keymap.set('n', '<C-j>', '<C-w>j', { desc = "Switch to bottom window" })
+keymap.set('n', '<C-h>', '<C-w>h', { desc = "Switch to Left Window" })
+keymap.set('n', '<C-l>', '<C-w>l', { desc = "Switch to Right Window" })
+keymap.set('n', '<C-k>', '<C-w>k', { desc = "Switch to Top Window" })
+keymap.set('n', '<C-j>', '<C-w>j', { desc = "Switch to Bottom Window" })
 
 keymap.set('n', '<Tab>', ':bnext<CR>', { desc = "Next Buffer" })
 keymap.set('n', '<S-Tab>', ':bprevious<CR>', { desc = "Previous Buffer" })
@@ -14,7 +14,8 @@ keymap.set('n', '<leader>x', function()
 end, { desc = "Close Buffer" })
 
 keymap.set('n', '<leader>h', ':ToggleTerm<CR>', { desc = "Toggle Terminal" })
-keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+keymap.set('n', '<Esc>', ':nohlsearch<CR>', { desc = "Clear Search Highlights" })
+keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = "Exit Terminal Mode" })
 
 -- LSP Keymaps
 vim.api.nvim_create_autocmd('LspAttach', {

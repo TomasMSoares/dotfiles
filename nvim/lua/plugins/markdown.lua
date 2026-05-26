@@ -7,6 +7,9 @@ return {
       vim.g.mkdp_filetypes = { "markdown" }
     end,
     ft = { "markdown" },
+    keys = {
+      { "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Markdown Preview" },
+    },
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
