@@ -10,5 +10,16 @@
 [alias]
   pf = push --force-with-lease
 
-[include]
-  path = ~/.gitconfig.local
+# Identity-based configuration switching
+# Personal
+[includeIf "gitdir:~/personal/"]
+  path = ~/.gitconfig-personal
+[includeIf "gitdir:~/dotfiles/"]
+  path = ~/.gitconfig-personal
+
+# Work
+[includeIf "gitdir:~/source/"]
+  path = ~/.gitconfig-reply
+[includeIf "gitdir:~/work/"]
+  path = ~/.gitconfig-reply
+
