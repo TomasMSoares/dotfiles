@@ -1,0 +1,42 @@
+gui:
+  # If true, use the theme from the terminal. 
+  # If false, use the theme specified in the config.
+  theme:
+    activeBorderColor:
+      - green
+      - bold
+    inactiveBorderColor:
+      - white
+    searchingActiveBorderColor:
+      - cyan
+      - bold
+    optionsTextColor:
+      - blue
+    selectedLineBgColor:
+      - blue
+    inactiveViewSelectedLineBgColor:
+      - bold
+    cherryPickedCommitBgColor:
+      - cyan
+    cherryPickedCommitFgColor:
+      - blue
+    markedBaseCommitBgColor:
+      - yellow
+    markedBaseCommitFgColor:
+      - blue
+    unstagedChangesColor:
+      - red
+    defaultFgColor:
+      - white
+
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+
+# Custom keybindings can be added here
+keybinding:
+  universal:
+    quit: 'q'
+    quit-alt1: '<c-c>'
+    return: '<esc>'
