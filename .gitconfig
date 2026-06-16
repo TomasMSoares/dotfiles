@@ -16,6 +16,8 @@
   path = ~/.gitconfig-personal
 [includeIf "gitdir:~/dotfiles/"]
   path = ~/.gitconfig-personal
+[includeIf "gitdir:~/TUM/Master/1FS/DevOps/"]
+  path = ~/.gitconfig-personal
 
 # Work
 [includeIf "gitdir:~/source/"]
@@ -23,3 +25,6 @@
 [includeIf "gitdir:~/work/"]
   path = ~/.gitconfig-reply
 
+# TUM GitLab
+[includeIf "gitdir:~/TUM/Master/1FS/ParProg/"]
+  path = ~/.gitconfig-tum
