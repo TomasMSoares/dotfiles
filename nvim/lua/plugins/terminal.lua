@@ -29,12 +29,16 @@ return {
 			"fish",
 			"toggleterm",
 			"sidekick",
-			"gemini",
+			"tmux",
 		}
 
 		vim.api.nvim_create_autocmd("TermOpen", {
 			pattern = "term://*",
 			callback = function()
+				if vim.bo.filetype == "sidekick_terminal" or vim.b.sidekick_cli then
+					set_terminal_keymaps()
+					return
+				end
 				local name = vim.api.nvim_buf_get_name(0):lower()
 				for _, pattern in ipairs(opt_in_patterns) do
 					if name:match(pattern) then

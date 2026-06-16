@@ -6,8 +6,22 @@ return {
 				backend = "tmux",
 				enabled = true,
 			},
+			tools = {
+				antigravity = {
+					cmd = { "agy" },
+				},
+			},
 		},
 	},
+	config = function(_, opts)
+		require("sidekick").setup(opts)
+		local config = require("sidekick.config")
+		for tool, _ in pairs(config.cli.tools) do
+			if tool ~= "antigravity" and tool ~= "claude" and tool ~= "pi" then
+				config.cli.tools[tool] = nil
+			end
+		end
+	end,
 	keys = {
 		-- {
 		--   "<tab>",
