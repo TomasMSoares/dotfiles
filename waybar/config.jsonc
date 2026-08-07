@@ -40,8 +40,8 @@
   },
 
   "pulseaudio": {
-    "format": "{icon} {volume:3}%",
-    "format-muted": "󰝟   - ",
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 - ",
     "format-icons": {
       "default": ["󰕿", "󰖀", "󰕾"]
     },
