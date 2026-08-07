@@ -1,0 +1,64 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "margin-top": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+    
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": ["network", "bluetooth", "pulseaudio", "battery"],
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate"
+  },
+
+  "clock": {
+    "format": "{:%H:%M | %a %d}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+
+  "network": {
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰈀 ",
+    "format-disconnected": "󱚼 ",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "tooltip-format": "{essid} ({signalStrength})\nFor credentials: nm-connection-editor",
+    "on-click": "networkmanager_dmenu"
+  },
+
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱",
+    "on-click": "rofi-bluetooth",
+    "tooltip-format": "{status}",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume:3}%",
+    "format-muted": "󰝟   - ",
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"]
+    },
+    "on-click": "pavucontrol",
+    "max-volume": 100
+  },
+
+  "battery": {
+    "bat": "BAT0",
+    "adapter": "ADP1",
+    "states": {
+      "warning": 20,
+      "critical": 10
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": "󱐋 {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-icons": ["", "", "", "", ""]
+  }
+}

@@ -1,0 +1,80 @@
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 0;
+}
+
+window#waybar {
+  background: rgba(80, 10, 130, 0.9);
+  color: #d9b5ff;
+}
+
+#workspaces {
+  margin-left: 10px;
+  min-width: 60px;
+}
+
+#network {
+  min-width: 60px;
+}
+
+#bluetooth {
+  min-width: 60px;
+}
+
+#pulseaudio {
+  min-width: 90px;
+}
+
+#pulseaudio.muted {
+  color: #f7768e;
+}
+
+#battery {
+  min-width: 90px;
+  margin-right: 10px;
+}
+
+#clock {
+  background: none;
+}
+
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#battery:hover,
+#clock:hover {
+  color: #fff9e6;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+#workspaces button {
+  padding: 0 5px;
+  color: rgba(166, 127, 103, 0.9);
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  transition: all 0.3s ease;
+  box-shadow: none;
+}
+
+#workspaces button.active {
+  color: #f7c57e;
+  border-bottom: 3px solid #f7c57e;
+  background: rgba(247, 197, 126, 0.1);
+}
+
+#workspaces button.visible {
+    color: #f7c57e;
+}
+
+#workspaces button.urgent {
+    color: #f7768e;
+    border-bottom: 3px solid #f7768e;
+}
+#workspaces button:hover {
+  color: #fff9e6;
+  text-shadow: 0 0 10px rgba(255, 249, 230, 0.8);
+  background: inherit;
+}
