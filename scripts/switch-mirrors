@@ -1,0 +1,17 @@
+#!/bin/bash
+case "$1" in
+  de|germany|Germany)
+    sudo cp /etc/pacman.d/mirrorlist-germany /etc/pacman.d/mirrorlist
+    echo "Switched to DE mirrors"
+    ;;
+  pt|portugal|Portugal)
+    sudo cp /etc/pacman.d/mirrorlist-portugal /etc/pacman.d/mirrorlist
+    echo "Switched to PT mirrors"
+    ;;
+  fin|finland|Finland)
+    sudo cp /etc/pacman.d/mirrorlist-finland /etc/pacman.d/mirrorlist
+    echo "Switched to FIN mirrors"
+    ;;
+  *)
+    echo "Usage: switch-mirrors [de|germany|Germany|pt|portugal|Portugal]"
+  esac

@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Exit if a command exits with non-zero status
+
+echo "Starting system upgrade & cleanup..."
+echo "Upgrading system packages..."
+
+sudo pacman -Syu --noconfirm
+yay -Syu --noconfirm 
+
+# Clear pacman cache
+echo "Cleaning old pacman cached packages..."
+sudo paccache -rk1
+
+# Clear yay cache
+echo "Cleaning old yay cached packages..."
+yay -Sc --noconfirm
+
+# Remove orphaned pacman packages
+echo "Removing orphaned pacman packages..."
+orphans=$(pacman -Qdtq)
+if [ -n "$orphans" ]; then
+	sudo pacman -Rns --noconfirm $orphans
+else
+	echo "No orphaned packages found."
+fi
+
+# Remove orphaned yay packages
+echo "Removing orphaned pacman packages..."
+orphans=$(yay -Qdtq)
+if [ -n "$orphans" ]; then
+	yay -Rns --noconfirm $orphans
+else
+	echo "No orphaned packages found."
+fi
+
+# Clean up systemd journal logs (older than 2 weeks)
+echo "Cleaning up systemd journal logs..."
+sudo journalctl --vacuum-time=2weeks
+
+# Clean up user cache
+echo "Cleaning user cache..."
+rm -rf ~/.cache/*
+rm -rf ~/.local/share/Trash/*
+
+

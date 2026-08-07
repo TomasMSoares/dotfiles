@@ -1,0 +1,4 @@
+#!/bin/bash
+TARGET=$(realpath "$1")
+ln -sf "$TARGET" "$HOME/.config/hypr/current_wallpaper"
+awww img ~/.config/hypr/current_wallpaper
