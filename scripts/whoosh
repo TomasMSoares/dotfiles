@@ -2,34 +2,26 @@
 
 # Exit if a command exits with non-zero status
 
-echo "Starting system upgrade & cleanup..."
-echo "Upgrading system packages..."
+set -e
 
-sudo pacman -Syu --noconfirm
+echo "Starting system upgrade & cleanup..."
+
+# Clean leftover temp download files
+sudo rm -rf /var/cache/pacman/pkg/download-*
+
+echo "Upgrading system packages..."
 yay -Syu --noconfirm 
 
 # Clear pacman cache
 echo "Cleaning old pacman cached packages..."
 sudo paccache -rk1
-
-# Clear yay cache
-echo "Cleaning old yay cached packages..."
-yay -Sc --noconfirm
+sudo paccache -ruk0
 
 # Remove orphaned pacman packages
 echo "Removing orphaned pacman packages..."
 orphans=$(pacman -Qdtq)
 if [ -n "$orphans" ]; then
 	sudo pacman -Rns --noconfirm $orphans
-else
-	echo "No orphaned packages found."
-fi
-
-# Remove orphaned yay packages
-echo "Removing orphaned pacman packages..."
-orphans=$(yay -Qdtq)
-if [ -n "$orphans" ]; then
-	yay -Rns --noconfirm $orphans
 else
 	echo "No orphaned packages found."
 fi
@@ -42,5 +34,4 @@ sudo journalctl --vacuum-time=2weeks
 echo "Cleaning user cache..."
 rm -rf ~/.cache/*
 rm -rf ~/.local/share/Trash/*
-
 
