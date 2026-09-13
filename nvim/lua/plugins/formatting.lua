@@ -39,6 +39,7 @@ return {
 				markdown = { "prettier" },
 				toml = { "taplo" },
 				sh = { "shfmt" },
+        tex = { "latexindent" },
 			},
 
 			-- format_on_save = {

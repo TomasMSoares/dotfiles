@@ -37,6 +37,7 @@ return {
 				sources = cmp.config.sources({
 					{ name = "lazydev", group_index = 0 }, -- Instant Neovim API globals
 					{ name = "nvim_lsp" },
+          { name = "vimtex" },
 					{ name = "luasnip" },
 				}, {
 					{

@@ -28,6 +28,7 @@ return {
 				"jsonls",
 				"yamlls",
 				"taplo",
+				"texlab",
 			},
 			automatic_enable = true,
 		})
@@ -98,5 +99,6 @@ return {
 		lsp.config("jsonls", { capabilities = capabilities })
 		lsp.config("yamlls", { capabilities = capabilities })
 		lsp.config("taplo", { capabilities = capabilities })
+		lsp.config("texlab", { capabilities = capabilities })
 	end,
 }
