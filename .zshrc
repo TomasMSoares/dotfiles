@@ -4,6 +4,15 @@ export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000
 export SAVEHIST=10000
 
+typeset -U path PATH
+path=(
+  "$HOME/.local/bin"
+  "$HOME/dotfiles/scripts"
+  "$HOME/go/bin"
+  $path
+)
+export PATH
+
 autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' menu select

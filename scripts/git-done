@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Git subcommand: git-done
+# Usage: git done [-f|--force] [target_branch]
+
+FORCE=0
+TARGET_BRANCH="main"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -f|--force)
+      FORCE=1
+      shift
+      ;;
+    -h|--help)
+      echo "Usage: git done [-f|--force] [target_branch]"
+      echo ""
+      echo "Options:"
+      echo "  -f, --force    Force delete the branch (-D) instead of safe delete (-d)"
+      echo "  -h, --help     Show this help message"
+      echo ""
+      echo "Arguments:"
+      echo "  target_branch  Branch to switch to and pull (default: main)"
+      exit 0
+      ;;
+    *)
+      TARGET_BRANCH="$1"
+      shift
+      ;;
+  esac
+done
+
+CURRENT_BRANCH=$(git branch --show-current)
+
+if [[ -z "$CURRENT_BRANCH" ]]; then
+  echo "Error: Not on any branch (detached HEAD)." >&2
+  exit 1
+fi
+
+if [[ "$CURRENT_BRANCH" == "$TARGET_BRANCH" ]]; then
+  echo "Already on $TARGET_BRANCH. Nothing to delete." >&2
+  exit 1
+fi
+
+echo "Switching to $TARGET_BRANCH..."
+git switch "$TARGET_BRANCH"
+
+echo "Pulling latest changes..."
+if ! git pull --prune; then
+  echo "Warning: 'git pull --prune' failed (e.g. uncommitted changes or diverged branch)." >&2
+  if [[ $FORCE -eq 0 ]]; then
+    echo "Aborting branch deletion to protect unmerged commits. Use 'git done -f' if you wish to force delete anyway." >&2
+    exit 1
+  fi
+fi
+
+if [[ $FORCE -eq 1 ]]; then
+  echo "Force-deleting $CURRENT_BRANCH..."
+  git branch -D "$CURRENT_BRANCH"
+else
+  echo "Safely deleting $CURRENT_BRANCH..."
+  if ! git branch -d "$CURRENT_BRANCH"; then
+    echo "Notice: Safe delete failed (e.g. squash-merged). Run 'git done -f' or 'git branch -D $CURRENT_BRANCH' to force-delete." >&2
+    exit 1
+  fi
+fi
+
+echo "Done! Switched to $TARGET_BRANCH and deleted $CURRENT_BRANCH."
