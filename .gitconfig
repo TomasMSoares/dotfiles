@@ -20,10 +20,14 @@
   path = ~/.gitconfig-personal
 
 # Work
-[includeIf "gitdir:~/source/"]
+[includeIf "gitdir:~/source/InternalTools/"]
   path = ~/.gitconfig-reply
-[includeIf "gitdir:~/work/"]
+[includeIf "gitdir:~/source/IFCO/"]
   path = ~/.gitconfig-reply
+[includeIf "gitdir:~/source/DXONE/"]
+  path = ~/.gitconfig-reply
+[includeIf "gitdir:~/source/Porsche/"]
+  path = ~/.gitconfig-porsche
 
 # TUM GitLab
 [includeIf "gitdir:~/TUM/Master/1FS/ParProg/"]
