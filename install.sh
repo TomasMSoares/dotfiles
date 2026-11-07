@@ -109,5 +109,41 @@ if ((${#missing[@]})); then
 fi
 
 echo
-echo "Not covered here: ~/dotfiles/scripts must be on PATH (hypr/hyprland.conf sets it),"
-echo "and the Claude Code hooks live in ~/.claude/settings.json."
+echo "Checks"
+
+# Print a path with $HOME shortened to <prefix> (portable to macOS's bash 3.2)
+short() {
+	if [[ "$1" == "$HOME"* ]]; then echo "${2:-~}${1#"$HOME"}"; else echo "$1"; fi
+}
+
+# Scripts (git-done, tmux-agent-state, ...) must be on PATH
+scripts="$DOTFILES/scripts"
+if [[ ":$PATH:" == *":$scripts:"* ]]; then
+	echo "  ✓ $(short "$scripts") is in PATH"
+else
+	# shellcheck disable=SC2016 # print a literal $HOME for copy-pasting
+	shown=$(short "$scripts" '$HOME')
+	echo "  ⚠ $(short "$scripts") is not in PATH. Add it in your shell's startup file, e.g."
+	echo "      zsh,  in ~/.zshrc:                path=(\"$shown\" \$path)"
+	echo "      bash, in ~/.bashrc or ~/.profile: export PATH=\"$shown:\$PATH\""
+	echo "    (this repo's .zshrc already does it, so a new zsh shell may be enough)"
+fi
+
+# Claude Code hooks that drive the tmux agent dots (reference copy: claude/hooks.json)
+settings="$HOME/.claude/settings.json"
+if ! command -v jq >/dev/null; then
+	echo "  ⚠ jq not installed, can't check the Claude Code hooks in $(short "$settings")"
+elif [[ ! -f "$settings" ]]; then
+	echo "  ⚠ $(short "$settings") not found. Copy the hooks from claude/hooks.json into it"
+else
+	missing_hooks=$(jq -r --slurpfile want "$DOTFILES/claude/hooks.json" '
+		($want[0].hooks | keys) - [(.hooks // {}) | to_entries[]
+			| select([.value[].hooks[]?.command] | any(test("tmux-agent-state"))) | .key]
+		| join(", ")' "$settings")
+	if [[ -z "$missing_hooks" ]]; then
+		echo "  ✓ Claude Code hooks set up in $(short "$settings")"
+	else
+		echo "  ⚠ $(short "$settings") is missing the tmux-agent-state hooks for: $missing_hooks"
+		echo "    Add them from claude/hooks.json (merge into the existing \"hooks\" object)"
+	fi
+fi

@@ -11,12 +11,8 @@
   pf = push --force-with-lease
 
 # Identity-based configuration switching
-# Personal
-[includeIf "gitdir:~/personal/"]
-  path = ~/.gitconfig-personal
-[includeIf "gitdir:~/dotfiles/"]
-  path = ~/.gitconfig-personal
-[includeIf "gitdir:~/TUM/"]
+# Default: personal. The includeIf rules below come later, so they override it per folder
+[include]
   path = ~/.gitconfig-personal
 
 # Work
