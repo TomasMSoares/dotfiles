@@ -28,12 +28,10 @@ gui:
       - red
     defaultFgColor:
       - white
-
 git:
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
-
+  diffRenderers:
+    - colorArg: always
+      command: delta --dark --paging=never
 # Custom keybindings can be added here
 keybinding:
   universal:

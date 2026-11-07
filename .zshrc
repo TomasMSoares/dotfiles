@@ -65,6 +65,14 @@ else
   fi
 fi
 
+# Tool integrations (before plugins: syntax-highlighting must wrap their widgets)
+# fzf: Ctrl-R history, Ctrl-T insert file, Alt-C cd into dir
+command -v fzf >/dev/null && source <(fzf --zsh)
+# zoxide: z <part-of-path>, zi for an interactive picker
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+# worktrunk: lets `wt switch` cd the current shell into the worktree
+command -v wt >/dev/null && eval "$(wt config shell init zsh)"
+
 # Check if plugin even exists
 for plugin in $plugins; do
   [[ -f "$plugin" ]] && source "$plugin"
