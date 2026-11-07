@@ -2,10 +2,7 @@ local keymap = vim.keymap
 
 keymap.set("n", "<C-n>", ":NvimTreeToggle<CR>", { desc = "Toggle nvim-tree" }) -- nvim-tree toggle
 
-keymap.set("n", "<C-h>", "<C-w>h", { desc = "Switch to Left Window" })
-keymap.set("n", "<C-l>", "<C-w>l", { desc = "Switch to Right Window" })
-keymap.set("n", "<C-k>", "<C-w>k", { desc = "Switch to Top Window" })
-keymap.set("n", "<C-j>", "<C-w>j", { desc = "Switch to Bottom Window" })
+-- <C-h/j/k/l> window navigation lives in plugins/tmux.lua (shared with tmux panes)
 
 keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next Buffer" })
 keymap.set("n", "<S-h>", ":bprevious<CR>", { desc = "Previous Buffer" })

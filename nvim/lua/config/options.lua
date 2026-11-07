@@ -13,3 +13,10 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.cursorline = true
 opt.clipboard = "unnamedplus"
+opt.autoread = true
+
+-- Reload buffers changed on disk (e.g. by agents in other tmux panes)
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "TermLeave" }, {
+	group = vim.api.nvim_create_augroup("UserAutoread", {}),
+	command = "silent! checktime",
+})

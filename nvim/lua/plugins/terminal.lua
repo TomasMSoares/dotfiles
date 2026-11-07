@@ -14,11 +14,11 @@ return {
 			-- Exit terminal mode with double escape
 			vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { buffer = 0, desc = "Exit Terminal Mode" })
 
-			-- Navigation inside terminal
-			vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
-			vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
-			vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
-			vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
+			-- Navigation inside terminal (also crosses into tmux panes)
+			vim.keymap.set("t", "<C-h>", [[<Cmd>TmuxNavigateLeft<CR>]], opts)
+			vim.keymap.set("t", "<C-j>", [[<Cmd>TmuxNavigateDown<CR>]], opts)
+			vim.keymap.set("t", "<C-k>", [[<Cmd>TmuxNavigateUp<CR>]], opts)
+			vim.keymap.set("t", "<C-l>", [[<Cmd>TmuxNavigateRight<CR>]], opts)
 		end
 
 		-- Define which terminals are "allowed" to have these mappings (Opt-in)
@@ -28,17 +28,12 @@ return {
 			"sh",
 			"fish",
 			"toggleterm",
-			"sidekick",
 			"tmux",
 		}
 
 		vim.api.nvim_create_autocmd("TermOpen", {
 			pattern = "term://*",
 			callback = function()
-				if vim.bo.filetype == "sidekick_terminal" or vim.b.sidekick_cli then
-					set_terminal_keymaps()
-					return
-				end
 				local name = vim.api.nvim_buf_get_name(0):lower()
 				for _, pattern in ipairs(opt_in_patterns) do
 					if name:match(pattern) then
