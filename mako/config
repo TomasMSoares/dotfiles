@@ -29,3 +29,12 @@ ignore-timeout=0
 [urgency=critical]
 border-color=#f38ba8
 default-timeout=0
+
+# Claude Code agent waiting for you (scripts/tmux-agent-state)
+[app-name="Claude Code"]
+border-color=#ff8700
+default-timeout=15000
+
+[app-name="Claude Code" body~="^Done"]
+border-color=#87af87
+default-timeout=8000

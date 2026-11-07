@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# Claude Code hook: tmux-agent-state <working|blocked|done|clear>
+# Marks the agent's tmux window with @claude_state (drawn as a dot in the tmux status bar)
+# and sends a notification when the agent is blocked or done while you're not looking at it.
+# Hook JSON arrives on stdin; this script must print nothing to stdout.
+
+state=$1
+input=$(cat)
+
+# Not running inside tmux: nothing to mark
+[[ -n "$TMUX_PANE" ]] || exit 0
+
+set_state() { tmux set -w -t "$TMUX_PANE" @claude_state "$1"; }
+clear_state() { tmux set -wu -t "$TMUX_PANE" @claude_state; }
+
+# Is this window on screen right now? (current window of an attached session, Ghostty focused)
+visible() {
+	[[ $(tmux display -p -t "$TMUX_PANE" '#{&&:#{window_active},#{session_attached}}') == 1 ]] || return 1
+	command -v hyprctl >/dev/null || return 0
+	[[ $(hyprctl activewindow -j 2>/dev/null | jq -r '.class') == *ghostty* ]]
+}
+
+notify() { notify-send -a "Claude Code" "$(tmux display -p -t "$TMUX_PANE" '#S › #I #W')" "$1"; }
+
+# First line of the agent's final message, read from the session transcript
+last_message() {
+	local transcript
+	transcript=$(jq -r '.transcript_path // empty' <<<"$input")
+	[[ -f "$transcript" ]] || return
+	tail -n 100 "$transcript" |
+		jq -rs '[.[] | select(.type == "assistant") | .message.content[]? | select(.type == "text") | .text] | last // empty' |
+		sed -n '/[^[:space:]]/{s/^[#*> -]*//;p;q}' | head -c 140
+}
+
+case "$state" in
+working)
+	set_state working
+	;;
+blocked)
+	previous=$(tmux show -wv -t "$TMUX_PANE" @claude_state 2>/dev/null)
+	set_state blocked
+	# One notification per block, and none if you're already looking at it
+	[[ "$previous" == blocked ]] && exit 0
+	visible && exit 0
+
+	tool=$(jq -r '.tool_name // empty' <<<"$input")
+	case "$tool" in
+	AskUserQuestion) body="Has a question for you" ;;
+	Bash) body="Wants to run: $(jq -r '.tool_input.command' <<<"$input" | head -c 120)" ;;
+	"") body="Needs your input" ;;
+	*) body="Wants to use $tool" ;;
+	esac
+	notify "$body"
+	;;
+done)
+	# Finished while you were watching: no green dot or notification needed
+	if visible; then
+		clear_state
+	else
+		set_state "done"
+		body=$(last_message)
+		notify "Done: ${body:-finished its turn}"
+	fi
+	;;
+clear)
+	clear_state
+	;;
+esac
+
+exit 0
