@@ -16,7 +16,7 @@
   path = ~/.gitconfig-personal
 [includeIf "gitdir:~/dotfiles/"]
   path = ~/.gitconfig-personal
-[includeIf "gitdir:~/TUM/Master/1FS/DevOps/"]
+[includeIf "gitdir:~/TUM/"]
   path = ~/.gitconfig-personal
 
 # Work
