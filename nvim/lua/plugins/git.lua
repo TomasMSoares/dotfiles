@@ -22,25 +22,14 @@ return {
 					end
 
 					-- Navigation
-					map("n", "]h", function()
-						if vim.wo.diff then
-							return "]h"
-						end
-						vim.schedule(function()
-							gs.next_hunk()
-						end)
-						return "<Ignore>"
-					end, { expr = true, desc = "Next Hunk" })
-
-					map("n", "[h", function()
-						if vim.wo.diff then
-							return "[h"
-						end
-						vim.schedule(function()
-							gs.prev_hunk()
-						end)
-						return "<Ignore>"
-					end, { expr = true, desc = "Prev Hunk" })
+					local function next_hunk()
+						gs.nav_hunk("next")
+					end
+					local function prev_hunk()
+						gs.nav_hunk("prev")
+					end
+					map("n", "<leader>gj", next_hunk, { desc = "Next Hunk" })
+					map("n", "<leader>gk", prev_hunk, { desc = "Prev Hunk" })
 
 					map("n", "<leader>gs", gs.stage_hunk, { desc = "Stage Hunk" })
 					map("n", "<leader>gp", gs.preview_hunk, { desc = "Preview Hunk" })
