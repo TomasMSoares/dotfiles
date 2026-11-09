@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 case "$1" in
   de|germany|Germany)
     sudo cp /etc/pacman.d/mirrorlist-germany /etc/pacman.d/mirrorlist
@@ -13,5 +15,5 @@ case "$1" in
     echo "Switched to FIN mirrors"
     ;;
   *)
-    echo "Usage: switch-mirrors [de|germany|Germany|pt|portugal|Portugal]"
+    echo "Usage: switch-mirrors [de|germany|Germany|pt|portugal|Portugal|fin|finland|Finland]"
   esac

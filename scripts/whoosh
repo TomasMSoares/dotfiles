@@ -1,7 +1,4 @@
-#!/bin/bash
-
-# Exit if a command exits with non-zero status
-
+#!/usr/bin/env bash
 set -e
 
 echo "Starting system upgrade & cleanup..."
