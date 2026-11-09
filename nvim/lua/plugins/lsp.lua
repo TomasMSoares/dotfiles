@@ -5,6 +5,7 @@ return {
 		"folke/lazydev.nvim",
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 		"mfussenegger/nvim-jdtls",
 	},
@@ -30,7 +31,29 @@ return {
 				"taplo",
 				"texlab",
 			},
-			automatic_enable = true,
+			-- jdtls is started by nvim-jdtls in ftplugin/java.lua; enabling it here too spawns a second server
+			automatic_enable = { exclude = { "jdtls" } },
+		})
+
+		-- Formatters (conform, plugins/formatting.lua) and linters (nvim-lint, plugins/linting.lua).
+		-- Kept in one call: a second setup() would replace this list instead of extending it.
+		require("mason-tool-installer").setup({
+			ensure_installed = {
+				-- formatters
+				"stylua",
+				"clang-format",
+				"google-java-format",
+				"prettier",
+				"shfmt",
+				"taplo",
+				-- linters
+				"eslint_d",
+				"shellcheck",
+				"hadolint",
+				"markdownlint",
+				-- both
+				"sqlfluff",
+			},
 		})
 
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()

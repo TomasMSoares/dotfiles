@@ -1,23 +1,8 @@
 return {
 	"stevearc/conform.nvim",
 	event = { "BufReadPre", "BufNewFile" },
-	dependencies = {
-		"williamboman/mason.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-	},
+	-- tools are installed via mason-tool-installer in plugins/lsp.lua
 	config = function()
-		require("mason-tool-installer").setup({
-			ensure_installed = {
-				"stylua",
-				"clang-format",
-				"google-java-format",
-				"prettier",
-				"sqlfluff",
-				"shfmt",
-				"taplo",
-			},
-		})
-
 		local conform = require("conform")
 
 		conform.setup({

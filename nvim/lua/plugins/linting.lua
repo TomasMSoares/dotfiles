@@ -1,21 +1,8 @@
 return {
 	"mfussenegger/nvim-lint",
 	event = { "BufReadPre", "BufNewFile" },
-	dependencies = {
-		"williamboman/mason.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-	},
+	-- tools are installed via mason-tool-installer in plugins/lsp.lua
 	config = function()
-		require("mason-tool-installer").setup({
-			ensure_installed = {
-				"eslint_d",
-				"shellcheck",
-				"hadolint",
-				"markdownlint",
-				"sqlfluff",
-			},
-		})
-
 		local lint = require("lint")
 
 		lint.linters_by_ft = {
