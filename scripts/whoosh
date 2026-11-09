@@ -10,7 +10,7 @@ echo "Starting system upgrade & cleanup..."
 sudo rm -rf /var/cache/pacman/pkg/download-*
 
 echo "Upgrading system packages..."
-yay -Syu --noconfirm 
+yay -Syu --noconfirm
 
 # Clear pacman cache
 echo "Cleaning old pacman cached packages..."
@@ -18,12 +18,11 @@ sudo paccache -rk1
 sudo paccache -ruk0
 
 # Remove orphaned pacman packages
-echo "Removing orphaned pacman packages..."
-orphans=$(pacman -Qdtq)
-if [ -n "$orphans" ]; then
-	sudo pacman -Rns --noconfirm "$orphans"
+mapfile -t orphans < <(pacman -Qdtq || true)
+if ((${#orphans[@]})); then
+  sudo pacman -Rns --noconfirm "${orphans[@]}"
 else
-	echo "No orphaned packages found."
+  echo "No orphaned packages found."
 fi
 
 # Clean up systemd journal logs (older than 2 weeks)
@@ -33,4 +32,3 @@ sudo journalctl --vacuum-time=2weeks
 # Clean up user cache
 echo "Cleaning user trash..."
 rm -rf ~/.local/share/Trash/*
-
