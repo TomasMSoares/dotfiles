@@ -1,8 +1,8 @@
 export EDITOR='nvim'
 export VISUAL='nvim'
 export HISTFILE="$HOME/.zsh_history"
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=100000
+export SAVEHIST=100000
 
 typeset -U path PATH
 path=(
@@ -49,6 +49,7 @@ else
   # Linux
   alias ls='ls --color=auto'
   alias sd='systemctl poweroff'
+  alias set-wallpaper='awww img'  # awww caches it, so it survives reboots
 
   if [[ -d "/usr/share/zsh/plugins" ]]; then
     # For Arch

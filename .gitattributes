@@ -1,3 +1,2 @@
 # Treat shader files as vendor distributed so they don't skew GitHub Language Statistics
 *.glsl linguist-vendored
-*.glsl linguist-documentation
