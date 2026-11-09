@@ -100,7 +100,7 @@ fi
 
 # Tools the configs expect (not installed by this script)
 missing=()
-for cmd in zsh git nvim tmux ghostty lazygit delta fzf zoxide wt jq rg fd; do
+for cmd in zsh git nvim tmux ghostty lazygit delta fzf zoxide wt jq rg fd tree-sitter; do
 	command -v "$cmd" >/dev/null || missing+=("$cmd")
 done
 if ((${#missing[@]})); then
