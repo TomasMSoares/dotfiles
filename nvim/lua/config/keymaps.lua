@@ -24,7 +24,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts("Go to Definition (Telescope)"))
 		vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts("Go to References (Telescope)"))
 
-		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts("Show Hover Documentation"))
 		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts("Rename Symbol"))
 		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("Code Actions"))
 	end,
