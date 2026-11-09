@@ -2,7 +2,6 @@ return {
 	"neovim/nvim-lspconfig",
 	lazy = false,
 	dependencies = {
-		"folke/lazydev.nvim",
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -63,35 +62,19 @@ return {
 		}
 		local lsp = vim.lsp
 
+		-- Applies to every server; the per-server configs below are merged on top
+		lsp.config("*", { capabilities = capabilities })
+
+		-- vim.* globals and plugin types come from lazydev (plugins/lazydev.lua)
 		lsp.config("lua_ls", {
-			capabilities = capabilities,
 			settings = {
 				Lua = {
-					runtime = {
-						version = "LuaJIT",
-					},
-
-					diagnostics = {
-						globals = { "vim" },
-					},
-
-					workspace = {
-						library = vim.api.nvim_get_runtime_file("", true),
-						checkThirdParty = false,
-					},
-
-					telemetry = {
-						enable = false,
-					},
+					runtime = { version = "LuaJIT" },
 				},
 			},
 		})
 
-		lsp.config("ts_ls", { capabilities = capabilities })
-		lsp.config("clangd", { capabilities = capabilities })
-
 		lsp.config("basedpyright", {
-			capabilities = capabilities,
 			settings = {
 				basedpyright = {
 					analysis = {
@@ -101,27 +84,18 @@ return {
 			},
 		})
 
+		-- Hover comes from basedpyright; ruff only lints/formats
 		lsp.config("ruff", {
-			capabilities = capabilities,
 			on_attach = function(client)
 				client.server_capabilities.hoverProvider = false
 			end,
 		})
 
+		-- Formatting is done by sqlfluff via conform
 		lsp.config("sqls", {
-			capabilities = capabilities,
 			on_attach = function(client, _)
 				client.server_capabilities.documentFormattingProvider = false
 			end,
 		})
-
-		lsp.config("dockerls", { capabilities = capabilities })
-		lsp.config("docker_compose_language_service", { capabilities = capabilities })
-		lsp.config("marksman", { capabilities = capabilities })
-		lsp.config("bashls", { capabilities = capabilities })
-		lsp.config("jsonls", { capabilities = capabilities })
-		lsp.config("yamlls", { capabilities = capabilities })
-		lsp.config("taplo", { capabilities = capabilities })
-		lsp.config("texlab", { capabilities = capabilities })
 	end,
 }
