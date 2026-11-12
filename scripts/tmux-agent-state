@@ -17,11 +17,54 @@ clear_state() { tmux set -wu -t "$TMUX_PANE" @claude_state; }
 # Is this window on screen right now? (current window of an attached session, Ghostty focused)
 visible() {
 	[[ $(tmux display -p -t "$TMUX_PANE" '#{&&:#{window_active},#{session_attached}}') == 1 ]] || return 1
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		[[ $(lsappinfo info -only bundleID "$(lsappinfo front)") == *com.mitchellh.ghostty* ]] || return 1
+		# Ghostty is in front, but is its focused terminal the tmux client showing this window?
+		local front here
+		front=$(osascript -e 'tell application "Ghostty" to get tty of focused terminal of selected tab of front window' 2>/dev/null) || return 1
+		here=$(tmux display -p -t "$TMUX_PANE" '#{session_name} #{window_id}')
+		tmux list-clients -F '#{client_tty} #{session_name} #{window_id}' | grep -qxF "$front $here"
+		return
+	fi
 	command -v hyprctl >/dev/null || return 0
-	[[ $(hyprctl activewindow -j 2>/dev/null | jq -r '.class') == *ghostty* ]]
+	# The focused window must be the Ghostty window showing this tmux window, recognised by the title tmux gives it
+	[[ $(hyprctl activewindow -j 2>/dev/null | jq -r '"\(.class)\t\(.title)"') == *ghostty*$'\t'"$(tmux_title)" ]]
 }
 
-notify() { notify-send -a "Claude Code" "$(tmux display -p -t "$TMUX_PANE" '#S › #I #W')" "$1"; }
+# Terminal title tmux sets (set-titles) for this pane's window
+tmux_title() { tmux display -p -t "$TMUX_PANE" "$(tmux show -gv set-titles-string)"; }
+
+notify() {
+	local where
+	where=$(tmux display -p -t "$TMUX_PANE" '#S › #I #W')
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		# Clicking the notification runs this script again to focus the right Ghostty window and tmux pane.
+		# It runs outside tmux with a bare environment, so pass along everything it needs
+		terminal-notifier -title "Claude Code" -subtitle "$where" -message "$1" -group "claude-$TMUX_PANE" \
+			-execute "$(printf 'PATH=%q TMUX=%q TMUX_PANE=%q %q focus </dev/null' "$PATH" "$TMUX" "$TMUX_PANE" "$0")" >/dev/null
+	else
+		# --wait blocks until the notification closes and prints the action if it was clicked,
+		# so wait in the background to let the hook return right away
+		(
+			[[ $(notify-send -a "Claude Code" --action=default=Focus --wait "$where" "$1") == default ]] &&
+				"$0" focus
+		) </dev/null >/dev/null 2>&1 &
+		disown
+	fi
+}
+
+# tty of the tmux client best suited to show this pane: one already on its window,
+# else one on its session, else the most recently used. In Ghostty this is also the terminal's tty
+client_tty() {
+	local here
+	here=$(tmux display -p -t "$TMUX_PANE" '#{session_name}	#{window_id}')
+	tmux list-clients -F '#{client_activity}	#{client_tty}	#{session_name}	#{window_id}' |
+		sort -rn | awk -F'\t' -v here="$here" '
+			$3 "\t" $4 == here { print $2; found = 1; exit }
+			$3 == substr(here, 1, index(here, "\t") - 1) && !session { session = $2 }
+			!any { any = $2 }
+			END { if (!found) print (session ? session : any) }'
+}
 
 # First line of the agent's final message, read from the session transcript
 last_message() {
@@ -54,6 +97,12 @@ blocked)
 	notify "$body"
 	;;
 done)
+	# Idle recaps (away summaries) also fire Stop, but no prompt or tool use came first:
+	# only a real turn leaves the window working or blocked
+	case $(tmux show -wv -t "$TMUX_PANE" @claude_state 2>/dev/null) in
+	working | blocked) ;;
+	*) exit 0 ;;
+	esac
 	# Finished while you were watching: no green dot or notification needed
 	if visible; then
 		clear_state
@@ -65,6 +114,21 @@ done)
 	;;
 clear)
 	clear_state
+	;;
+focus)
+	# Notification clicked: switch the best client to this pane, then raise its Ghostty window
+	tty=$(client_tty)
+	# Hyprland only knows windows by title, so note the client's title before switching changes it
+	old_title=$(tmux list-clients -F "#{client_tty}	$(tmux show -gv set-titles-string)" | awk -F'\t' -v t="$tty" '$1 == t { print $2 }')
+	[[ -n "$tty" ]] && tmux switch-client -c "$tty" -t "$TMUX_PANE"
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		osascript -e 'on run {t}' -e 'tell application "Ghostty"' -e 'activate' \
+			-e 'if t is not "" then focus (first terminal whose tty is t)' -e 'end tell' -e 'end run' "$tty" >/dev/null
+	elif command -v hyprctl >/dev/null; then
+		address=$(hyprctl clients -j | jq -r --arg old "$old_title" --arg new "$(tmux_title)" \
+			'map(select(.class | test("ghostty"))) | map(select(.title == $old or .title == $new)) | first | .address // empty')
+		[[ -n "$address" ]] && hyprctl dispatch focuswindow "address:$address" >/dev/null
+	fi
 	;;
 esac
 

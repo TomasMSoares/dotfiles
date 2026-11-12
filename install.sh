@@ -103,6 +103,10 @@ missing=()
 for cmd in zsh git nvim tmux ghostty lazygit delta fzf zoxide wt jq rg fd tree-sitter; do
 	command -v "$cmd" >/dev/null || missing+=("$cmd")
 done
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	# tmux-agent-state notifications (notify-send on Linux)
+	command -v terminal-notifier >/dev/null || missing+=(terminal-notifier)
+fi
 if ((${#missing[@]})); then
 	echo
 	echo "Missing tools: ${missing[*]}"
