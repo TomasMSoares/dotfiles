@@ -32,9 +32,12 @@ local -a plugins=()
 
 alias q='exit'
 alias grep='grep --color=auto'
+
 alias vim='nvim'
 alias nvi='nvim'
 alias vi='nvim'
+
+alias lg='lazygit'
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS

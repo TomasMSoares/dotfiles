@@ -22,3 +22,6 @@ custom-shader-animation = always
 background = #292320
 
 macos-titlebar-style = hidden
+
+# Left Option sends Alt (tmux Alt-1..9), right Option still types special characters
+macos-option-as-alt = left

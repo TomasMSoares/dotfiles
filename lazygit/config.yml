@@ -29,9 +29,13 @@ gui:
     defaultFgColor:
       - white
 git:
+  # Cycle between renderers with `|` (and `\` in reverse)
+  # First one goes side-by-side only when the diff view is wide enough
   diffRenderers:
     - colorArg: always
-      command: delta --dark --paging=never
+      command: delta --{{colorScheme}} --paging=never {{if gt .width 160}}--side-by-side{{end}} -w={{width}}
+    - colorArg: always
+      command: delta --{{colorScheme}} --paging=never
 # Custom keybindings can be added here
 keybinding:
   universal:
