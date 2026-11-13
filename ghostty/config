@@ -23,5 +23,12 @@ background = #292320
 
 macos-titlebar-style = hidden
 
+# Every window is a tmux client (scripts/tmux-open), so closing one just detaches: nothing to confirm.
+# Login shell so the script finds tmux (Homebrew PATH) when Ghostty is started from the Dock
+command = zsh -lc "$HOME/dotfiles/scripts/tmux-open"
+confirm-close-surface = false
+# Cmd+Enter opens another tmux window, like SUPER+Return on Hyprland (fullscreen stays on Cmd+Ctrl+F)
+keybind = super+enter=new_window
+
 # Left Option sends Alt (tmux Alt-1..9), right Option still types special characters
 macos-option-as-alt = left

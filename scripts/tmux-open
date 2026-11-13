@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Ghostty's startup command: put each new terminal window in tmux.
+# Reattach the most recently used session no other window is showing, else start a new one.
+# Never attach to a session that's already on screen: both windows would mirror each other.
+
+session=$(tmux list-sessions -F '#{session_attached}	#{session_activity}	#{session_name}' 2>/dev/null |
+	awk -F'\t' '$1 == 0' | sort -t$'\t' -k2 -rn | head -n 1 | cut -f3-)
+
+if [[ -n "$session" ]]; then
+	exec tmux attach -t "=$session"
+fi
+exec tmux new-session

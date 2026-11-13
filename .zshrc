@@ -41,6 +41,7 @@ alias lg='lazygit'
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS
+  alias l='ls -G'
   alias ls='ls -G'
   alias sd='sudo shutdown -h now'
 
@@ -50,6 +51,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   )
 else
   # Linux
+  alias l='ls --color-auto'
   alias ls='ls --color=auto'
   alias sd='systemctl poweroff'
   alias set-wallpaper='awww img'  # awww caches it, so it survives reboots

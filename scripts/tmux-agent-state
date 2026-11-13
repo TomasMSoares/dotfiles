@@ -11,8 +11,9 @@ input=$(cat)
 # Not running inside tmux: nothing to mark
 [[ -n "$TMUX_PANE" ]] || exit 0
 
-set_state() { tmux set -w -t "$TMUX_PANE" @claude_state "$1"; }
-clear_state() { tmux set -wu -t "$TMUX_PANE" @claude_state; }
+# @claude_pane lets tmux.conf tell the agent's pane apart from others in its window
+set_state() { tmux set -w -t "$TMUX_PANE" @claude_state "$1" \; set -w -t "$TMUX_PANE" @claude_pane "$TMUX_PANE"; }
+clear_state() { tmux set -wu -t "$TMUX_PANE" @claude_state \; set -wu -t "$TMUX_PANE" @claude_pane; }
 
 # Is this window on screen right now? (current window of an attached session, Ghostty focused)
 visible() {
@@ -78,7 +79,13 @@ last_message() {
 
 case "$state" in
 working)
-	set_state working
+	# A tool cut short by Ctrl-C/Esc also lands here (PostToolUseFailure): the turn is over, keep it cancelled.
+	# Interrupts outside a tool fire no hook at all; tmux.conf catches those keys instead
+	if [[ $(jq -r '.is_interrupt // false' <<<"$input") == true ]]; then
+		set_state cancelled
+	else
+		set_state working
+	fi
 	;;
 blocked)
 	previous=$(tmux show -wv -t "$TMUX_PANE" @claude_state 2>/dev/null)
@@ -98,9 +105,10 @@ blocked)
 	;;
 done)
 	# Idle recaps (away summaries) also fire Stop, but no prompt or tool use came first:
-	# only a real turn leaves the window working or blocked
+	# only a real turn leaves the window working or blocked.
+	# Stop never fires after an interrupt, so cancelled here means Ctrl-C/Esc didn't actually stop the turn
 	case $(tmux show -wv -t "$TMUX_PANE" @claude_state 2>/dev/null) in
-	working | blocked) ;;
+	working | blocked | cancelled) ;;
 	*) exit 0 ;;
 	esac
 	# Finished while you were watching: no green dot or notification needed
